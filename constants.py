@@ -19,12 +19,13 @@ class Headers:
 
 def read_game_version():
     try:
+        # Read game version in fn logs (only for windows)
         log_path = os.path.join(os.path.expanduser("~"),
                                 'AppData', 'Local',
                                 'FortniteGame', 'Saved',
                                 'Logs', 'FortniteGame.log')
         if not os.path.exists(log_path):
-            return False
+            raise Exception
         try:
             with open(log_path, 'r', encoding='utf-8') as file:
                 lines = file.readlines()
@@ -40,7 +41,7 @@ def read_game_version():
                 if log_sub_type == 'Build':
                     result = ':'.join(parts[2:]).strip()
                     return result
-    except Exception as error:
+    except Exception:
         pass
     return "++Fortnite+Release-26.00-CL-27233190"
 
