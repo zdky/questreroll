@@ -1933,7 +1933,7 @@
   },
   "msg": {
     "en": {
-      "start.hello": "👋 Hey! I'm a Fortnite PvE bot to automatically get and manually replace daily quests!\n\n<b>My commands:</b>\n🌎 /lang — change quests language\n🕹 /quest — your quest list\n📊 /stats — your bot stats\n⚡️ /status — your server load\n📬 /support — if something broke",
+      "start.hello": "👋 Hey! I'm a Fortnite PvE bot to automatically get and manually replace daily quests!\n\n<b>My commands:</b>\n\n🌎 /lang — change quests language\n\n🕹 /quest — your quest list\n\n📊 /stats — your bot stats\n\n⚡️ /status — your server load\n\n📬 /support — if something broke",
       "lang.detect": "\n\nYour language: <b>{}</b>? The quests will be displayed in it.",
       "send.auth.code": "🚀 Send value of <b>authorizationCode</b> follow the link:\n\n{}\n\nIf value doesn't exist: open Epic Games - click on your Avatar - 'Account' and try again!",
       "incorrect.auth.code": "Hey, if you write auth-code is incorrect (only 32 symbols), your msg size: {}! Please try again.\n\nI don't handle messages other than auth-code!",
