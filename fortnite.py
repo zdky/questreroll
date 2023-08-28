@@ -317,14 +317,14 @@ async def send_quest_message(user_id, user_data, msg, keyboard):
             parse_mode="HTML",
             reply_markup=keyboard
         )
-        log.info(f"Edit quest message user_id: {user_id}, "
+        log.info(f"Edit old quest message user_id: {user_id}, "
                  + f"msg_id: {user_data['first_quest_msg']}")
-    except Exception as error:
+    except Exception:
         bot_msg = await bot.send_message(user_id,
                                          msg,
                                          parse_mode="HTML",
                                          reply_markup=keyboard)
-        log.info(f"Send first quest message user_id: {user_id}, "
+        log.info(f"Send first/new quest message user_id: {user_id}, "
                  + f"msg_id: {bot_msg.message_id}")
         await edit_user_info(user_id, 'first_quest_msg', bot_msg.message_id)
 
@@ -357,7 +357,7 @@ async def start_quest_api(user_id):
     pve_data = await get_quests(access_token, account_id)
 
     if pve_data:
-        await edit_user_info(user_id, new_data="quest") # +1 stats
+        await edit_user_info(user_id, "quest") # +1 stats
         await edit_user_info(user_id, 'headers', pve_data['headers'])
         await process_quests(user_id, user_data, pve_data['campaign'])
         await delete_all_msgs(user_data['msg_for_del'], user_id)

@@ -7,13 +7,14 @@ scheduled_users = []
 
 async def add_new_user(user_id: int, lang: str = "en"):
     """Add new user_id in auth.json with fields:\n
-    {   "lang": lang,
-        "acc_token": {},
+    {   
+        "lang": lang,
+        "acc_token": {},\n
         "fn_token": {},
-        "buttons": {},
+        "buttons": {},\n
         "headers": {},
-        "msg_for_del": {},
-        "first_quest_msg": "",
+        "msg_for_del": [],\n
+        "first_quest_msg": "",\n
         "stats": {"quest": 0, "skips": 0}
     }
 
@@ -38,17 +39,16 @@ async def add_new_user(user_id: int, lang: str = "en"):
         data = orjson.dumps(file_data, option=orjson.OPT_INDENT_2).decode("utf-8")
         await file2.write(data)
 
-async def edit_user_info(user_id:int, field:str = None,
-                         new_data = None, add: bool = False):
+async def edit_user_info(user_id:int, field:str = None, new_data = None):
     """Edit user data in auth.json
 
     Args:
         user_id (int): telegram user id\n
-        field (str): "lang" or "buttons" or "acc_token" or "fn_token"
-        or "msg_for_del" or "first_quest_msg"\n
+        field (str): "lang" / "buttons" / 
+        "acc_token" / "fn_token" / 
+        "msg_for_del" / "first_quest_msg"
+        or "quest"/"skips" for stats +1\n
         new_data: if field="lang":(str) other:(dict) or empty = {}
-        or "quest" or "skips"\n
-        add (bool): only for field "msg_for_del", add new id's
     """
     user_id = str(user_id)
     async with aiofiles.open('auth.json', 'r', encoding="utf-8") as file1:
@@ -56,10 +56,9 @@ async def edit_user_info(user_id:int, field:str = None,
         file_data = orjson.loads(file_data)
         async with aiofiles.open("auth.json", "w", encoding="utf-8") as file2:
             try:
-                if add:
+                if field == 'msg_for_del':
                     file_data[user_id][field].append(new_data)
-                    logging.info(f"in edit_user_info(), add msg id: {new_data} for delete")
-                elif new_data in ("quest", "skips"):
+                elif field in ("quest", "skips"):
                     file_data[user_id]["stats"][new_data] += 1
                 else:
                     file_data[user_id][field] = new_data
@@ -76,7 +75,14 @@ async def read_user_info(user_id:int):
         user_id (int): telegram user id
 
     Returns:
-        user_data (dict): {lang: str, buttons: dict, acc_token: dict, fn_token: dict}
+        user_data (dict): { "lang": lang,
+        "acc_token": {},\n
+        "fn_token": {},
+        "buttons": {},\n
+        "headers": {},
+        "msg_for_del": [],\n
+        "first_quest_msg": "",\n
+        "stats": {"quest": 0, "skips": 0}}
     """
     async with aiofiles.open('auth.json', 'r', encoding="utf-8") as file:
         try:

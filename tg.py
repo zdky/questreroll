@@ -79,7 +79,7 @@ async def send_auth_link(message: types.Message):
         await message.answer_animation(FN_JSON['msg']['en']['demo.gif'],
                                        caption=FN_JSON['msg']['en']['second.start'],
                                        parse_mode="HTML")
-    await edit_user_info(user_id, "msg_for_del", bot_msg.message_id, add=True)
+    await edit_user_info(user_id, "msg_for_del", bot_msg.message_id)
 
 @dp.message_handler(lambda msg: not msg.text.startswith("/") and len(msg.text) < 32)
 async def authcode_error(message: types.Message):
@@ -174,12 +174,12 @@ async def quest_handler(message: types.Message):
     if not await auth_checker(user_id):
         msg = FN_JSON["msg"]["en"]["error.go.login"]
         bot_msg = await bot.send_message(user_id, msg)
-        await edit_user_info(user_id, "msg_for_del", bot_msg.message_id, add=True)
+        await edit_user_info(user_id, "msg_for_del", bot_msg.message_id)
         await send_auth_link(message)
         return
     msg = FN_JSON["msg"]["en"]["req.quests.wait"]
     bot_msg = await bot.send_message(user_id, msg)
-    await edit_user_info(user_id, "msg_for_del", bot_msg.message_id, add=True)
+    await edit_user_info(user_id, "msg_for_del", bot_msg.message_id)
     # Check tokens and get quest
     if await tokens_check_and_update(user_id):
         await start_quest_api(user_id)
@@ -308,7 +308,7 @@ async def confirm_button_click(callback_query: CallbackQuery):
         if await quest_reroll(quest_id, headers, account_id): # request
             await bot.answer_callback_query(callback_query.id,
                                             "🔥Quest rerolled!🔥")
-            await edit_user_info(user_id, new_data="skips") # +1 stats
+            await edit_user_info(user_id, "skips") # +1 stats
         await edit_user_info(user_id, 'buttons', {}) # Reset buttons for click "no"
         await quest_handler(callback_query.message) # update quest list anyway
     elif confirm == 'no':
