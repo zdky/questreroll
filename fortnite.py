@@ -127,7 +127,6 @@ async def get_quests(access_token:str, account_id:str):
     res_json = await aiorequest("post", link, headers, data, from_func="get_quests")
     if res_json:
         campaign = res_json["profileChanges"][0]["profile"]
-        # await file_log("in get_quests(), campaign: \n\n", campaign) #! DEL
         return {"campaign": campaign, "headers": headers}
     return False
 
@@ -190,7 +189,6 @@ async def quest_reroll(quest_id: str, headers: dict, account_id: str):
     link = Links.profile_api.format(account_id, "FortRerollDailyQuest", "campaign")
     json = {"questId": quest_id}
     res_json = await aiorequest("post", link, headers, json=json, from_func="quest_reroll")
-    # await file_log("in quest_reroll(), res_json: \n\n", res_json) #! DEL
     return True if res_json else False
 
 async def start_3step_login(user_id: int, auth_code: str):
