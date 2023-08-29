@@ -1,7 +1,7 @@
 # pylint: disable=E1101, C0114, W0718
 import orjson # faster json
 import aiofiles
-from utils import logging
+from utils import log
 
 scheduled_users = []
 
@@ -50,23 +50,25 @@ async def edit_user_info(user_id:int, field:str = None, new_data = None):
         or "quest"/"skips" for stats +1\n
         new_data: if field="lang":(str) other:(dict) or empty = {}
     """
+    log.info(f"in edit_user_info():\nuser_id = {user_id}\n"
+             + f"field = {field}\nnew_data = {new_data}")
     user_id = str(user_id)
     async with aiofiles.open('auth.json', 'r', encoding="utf-8") as file1:
         file_data = await file1.read()
         file_data = orjson.loads(file_data)
         async with aiofiles.open("auth.json", "w", encoding="utf-8") as file2:
             try:
-                if field == 'msg_for_del':
+                if field == 'msg_for_del' and new_data:
                     file_data[user_id][field].append(new_data)
                 elif field in ("quest", "skips"):
-                    file_data[user_id]["stats"][new_data] += 1
+                    file_data[user_id]["stats"][field] += 1
                 else:
                     file_data[user_id][field] = new_data
                 data = orjson.dumps(file_data,
                                     option=orjson.OPT_INDENT_2).decode("utf-8")
                 await file2.write(data)
             except Exception as error:
-                logging.error(f"in edit_user_info(), ERROR: {error}")
+                log.error(f"in edit_user_info(), ERROR: {error}")
 
 async def read_user_info(user_id:int):
     """Read user from auth.json
@@ -91,5 +93,5 @@ async def read_user_info(user_id:int):
             user_data = user_data.get(str(user_id), {})
             return user_data
         except Exception as error:
-            logging.error(f"in read_user_info(), ERROR: {error}")
+            log.error(f"in read_user_info(), ERROR: {error}")
             return False

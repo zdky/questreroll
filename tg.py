@@ -101,7 +101,7 @@ async def authcode_handler(message: types.Message):
         if not await auth_checker(user_id):
             msg = FN_JSON["msg"]["en"]["auth.correct"]
             bot_msg = await bot.send_message(user_id, msg)
-            await later_del_msg([bot_msg, message], time=6)
+            await later_del_msg([bot_msg, message], time=2)
             if await start_3step_login(user_id, auth_code[0]): # Auth Fortnite API
                 await quest_handler(message)
                 return
