@@ -264,9 +264,11 @@ async def check_token_expires(token: dict):
 
 async def tokens_check_and_update(user_id: int):
     user_data = await read_user_info(user_id)
+
     token = user_data.get('fn_token', 0)
     if await check_token_expires(token):
-        if await check_refresh_expires(token): #! maybe -2h
+        # it's impossible. but the refresh_token is invalid 1-5h before it expires! :/
+        if await check_refresh_expires(token): #! maybe -2h? i don't know
             log.warning(f"tokens_check_and_update(), user_id:{user_id}, "
                         + "fn_token died, try refresh..")
             new_token = await get_fortnite_token(
@@ -276,19 +278,24 @@ async def tokens_check_and_update(user_id: int):
                          + "fn_token refreshed!")
                 await edit_user_info(user_id, 'fn_token', new_token)
                 return True
-        else: # full update tokens
-            log.warning(f"tokens_check_and_update(), user_id:{user_id}, "
-                        + "fn_token refresh died, try refresh..")
-            token = user_data.get('acc_token', 0)
-            if await check_token_expires(token):
-                if await refresh_all_tokens(user_id, token.get('refresh_token')):
-                    log.info(f"tokens_check_and_update(), user_id:{user_id}, "
-                                + "acc_token and fn_token refreshed!")
-                    return True
     else: # token live
         log.info(f"tokens_check_and_update(), user_id:{user_id}, fn_token live!")
         return True
 
+    log.warning(f"tokens_check_and_update(), user_id:{user_id}, "
+                + "fn_token refresh died, try refresh all tokens..")
+    token = user_data.get('acc_token', 0)
+    if await check_token_expires(token):
+        if await refresh_all_tokens(user_id, token.get('refresh_token')):
+            log.info(f"tokens_check_and_update(), user_id:{user_id}, "
+                        + "acc_token and fn_token refreshed!")
+            return True
+
+    await edit_user_info(user_id, "acc_token", {})
+    await edit_user_info(user_id, "fn_token", {})
+    from tg import bot
+    await bot.send_message(user_id, 
+                           "All tokens died, wtf? Please use /start for auth-code.")
     log.error(f"tokens_check_and_update(), user_id:{user_id}, all tokens died!")
     return False
 
