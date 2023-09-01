@@ -53,8 +53,8 @@ async def edit_user_info(user_id:int, field:str = None, new_data = None):
         OR quest/skips for stats +1\n
         new_data: if field="lang":lang_code(str), other:(dict) or empty = {}
     """
-    log.info(f"in edit_user_info():\nuser_id = {user_id}\n"
-             + f"field = {field}\nnew_data = {new_data}")
+    # log.info(f"in edit_user_info():\nuser_id = {user_id}\n"
+    #          + f"field = {field}\nnew_data = {new_data}")
 
     try:
         async with aiofiles.open('auth.json', 'r', encoding="utf-8") as file1:
