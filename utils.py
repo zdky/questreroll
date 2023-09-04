@@ -1,7 +1,8 @@
 # pylint: disable=C0415, C0114, C0115, C0116
+import os
 import logging
 from datetime import datetime, timezone, timedelta
-
+from config import create_log_file
 
 # Create a custom formatter with colored log levels and custom date format
 class ColoredFormatter(logging.Formatter):
@@ -44,20 +45,19 @@ console_formatter = ColoredFormatter(
     "[%(asctime)s.%(msecs)03d] %(levelname)s: %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
 )
 console_handler.setFormatter(console_formatter)
+log.addHandler(console_handler)
 
 # Create file handler and set the formatter without color
-log_file_name = f"console_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.log"
-file_handler = logging.FileHandler(log_file_name, encoding="utf-8")
-file_formatter = ColoredFormatter(
-    "[%(asctime)s.%(msecs)03d] %(levelname)s: %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
-    colored=False,
-)
-file_handler.setFormatter(file_formatter)
-
-# Add both handlers to the logger
-log.addHandler(console_handler)
-log.addHandler(file_handler)
+if create_log_file:
+    log_file_name = f"console_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.log"
+    file_handler = logging.FileHandler(log_file_name, encoding="utf-8")
+    file_formatter = ColoredFormatter(
+        "[%(asctime)s.%(msecs)03d] %(levelname)s: %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+        colored=False,
+    )
+    file_handler.setFormatter(file_formatter)
+    log.addHandler(file_handler)
 
 
 def get_time(date_type: str = None):
@@ -81,8 +81,8 @@ def get_time(date_type: str = None):
 
 
 def server_status():
-    import psutil
     import os
+    import psutil
     from fortnite import FN_JSON
 
     cpu_used = psutil.cpu_percent(interval=1)
@@ -113,3 +113,11 @@ def server_status():
         disk_total,
         uptime_str,
     )
+
+
+def create_auth_json():
+    full_path = os.path.split(os.path.abspath(__file__))[0]
+    auth_path = os.path.join(full_path, "auth.json")
+    if not os.path.exists(auth_path):
+        with open(auth_path, "w", encoding="utf-8") as auth_file:
+            auth_file.write("{}")

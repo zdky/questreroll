@@ -5,9 +5,11 @@
 from time import sleep
 from aiogram import executor
 from tg import dp, log, tg_token
+from utils import create_auth_json
 
 # Start bot
 if __name__ == "__main__":
+    create_auth_json()
     if len(tg_token) > 20:
         while True:
             try:

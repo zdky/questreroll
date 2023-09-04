@@ -5,6 +5,7 @@ from aiogram.dispatcher.filters import BoundFilter
 from aiogram.dispatcher import Dispatcher
 from aiogram import types, Bot
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
+# Locals
 from config import tg_token, first_user, first_user_id
 from utils import log, get_time, server_status
 from database import add_new_user

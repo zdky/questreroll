@@ -1,6 +1,7 @@
 # pylint: disable=E1101, C0114, W0718
 import orjson  # faster json
 import aiofiles
+# Locals
 from utils import log
 
 scheduled_users = []
