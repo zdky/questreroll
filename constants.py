@@ -31,7 +31,7 @@ class Headers:
     )
 
 
-async def read_jsons():
+async def fn_json_read():
     full_path = os.path.split(os.path.abspath(__file__))[0]
     fn_path = os.path.join(full_path, "fortnite.json")
     if not os.path.exists(fn_path):
@@ -47,5 +47,5 @@ async def read_jsons():
     return fn_json
 
 
-FN_JSON = asyncio.get_event_loop().run_until_complete(read_jsons())
+FN_JSON = asyncio.get_event_loop().run_until_complete(fn_json_read())
 GAME_VER = "++Fortnite+Release-26.00-CL-27424790"
