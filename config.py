@@ -1,5 +1,5 @@
 # Your telegram token bot via @BotFather #! required
-tg_token = ""
+tg_token = "YOUR TOKEN"
 
 # True = for bot use only by you / False = for everyone #? optional
 first_user = True
