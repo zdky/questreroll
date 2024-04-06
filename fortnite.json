@@ -231,7 +231,7 @@
       },
       "rarity": "uncommon",
       "type": "quest",
-      "difficulty": 4
+      "difficulty": 3
     },
     "Quest:daily_destroygnomes": {
       "name": {
@@ -519,7 +519,7 @@
       },
       "rarity": "uncommon",
       "type": "quest",
-      "difficulty": 4
+      "difficulty": 3
     },
     "Quest:daily_discovery_industriallocations": {
       "name": {
@@ -567,7 +567,7 @@
       },
       "rarity": "uncommon",
       "type": "quest",
-      "difficulty": 4
+      "difficulty": 3
     },
     "Quest:daily_discovery_rurallocations": {
       "name": {
@@ -663,7 +663,7 @@
       },
       "rarity": "uncommon",
       "type": "quest",
-      "difficulty": 3
+      "difficulty": 4
     },
     "Quest:daily_discovery_suburbanlocations": {
       "name": {
@@ -807,7 +807,7 @@
       },
       "rarity": "uncommon",
       "type": "quest",
-      "difficulty": 4
+      "difficulty": 3
     },
     "Quest:daily_high_priority": {
       "name": {
@@ -855,7 +855,7 @@
       },
       "rarity": "uncommon",
       "type": "quest",
-      "difficulty": 5
+      "difficulty": 2
     },
     "Quest:daily_huskextermination_anyhero": {
       "name": {
@@ -999,7 +999,7 @@
       },
       "rarity": "uncommon",
       "type": "quest",
-      "difficulty": 4
+      "difficulty": 3
     },
     "Quest:daily_huskextermination_ninja": {
       "name": {
@@ -1047,7 +1047,7 @@
       },
       "rarity": "uncommon",
       "type": "quest",
-      "difficulty": 4
+      "difficulty": 2
     },
     "Quest:daily_huskextermination_outlander": {
       "name": {
@@ -1095,7 +1095,7 @@
       },
       "rarity": "uncommon",
       "type": "quest",
-      "difficulty": 3
+      "difficulty": 2
     },
     "Quest:daily_huskextermination_ranged_assault": {
       "name": {
@@ -1143,7 +1143,7 @@
       },
       "rarity": "uncommon",
       "type": "quest",
-      "difficulty": 3
+      "difficulty": 2
     },
     "Quest:daily_huskextermination_ranged_pistol": {
       "name": {
@@ -1239,7 +1239,7 @@
       },
       "rarity": "uncommon",
       "type": "quest",
-      "difficulty": 5
+      "difficulty": 4
     },
     "Quest:daily_huskextermination_ranged_smg": {
       "name": {
@@ -1335,7 +1335,7 @@
       },
       "rarity": "uncommon",
       "type": "quest",
-      "difficulty": 5
+      "difficulty": 4
     },
     "Quest:daily_huskextermination_soldier": {
       "name": {
@@ -1383,7 +1383,7 @@
       },
       "rarity": "uncommon",
       "type": "quest",
-      "difficulty": 4
+      "difficulty": 2
     },
     "Quest:daily_huskextermination_trap": {
       "name": {
@@ -1431,7 +1431,7 @@
       },
       "rarity": "uncommon",
       "type": "quest",
-      "difficulty": 4
+      "difficulty": 3
     },
     "Quest:daily_mission_buildradar": {
       "name": {
@@ -1479,7 +1479,7 @@
       },
       "rarity": "uncommon",
       "type": "quest",
-      "difficulty": 3
+      "difficulty": 4
     },
     "Quest:daily_mission_specialist_anyhero_1": {
       "name": {
@@ -1527,7 +1527,7 @@
       },
       "rarity": "uncommon",
       "type": "quest",
-      "difficulty": 4
+      "difficulty": 3
     },
     "Quest:daily_mission_specialist_anyhero_2": {
       "name": {
@@ -1623,7 +1623,7 @@
       },
       "rarity": "uncommon",
       "type": "quest",
-      "difficulty": 4
+      "difficulty": 3
     },
     "Quest:daily_mission_specialist_ninja": {
       "name": {
@@ -1671,7 +1671,7 @@
       },
       "rarity": "uncommon",
       "type": "quest",
-      "difficulty": 5
+      "difficulty": 3
     },
     "Quest:daily_mission_specialist_outlander": {
       "name": {
@@ -1767,7 +1767,7 @@
       },
       "rarity": "uncommon",
       "type": "quest",
-      "difficulty": 4
+      "difficulty": 3
     },
     "Quest:daily_partyof50": {
       "name": {
@@ -1815,7 +1815,7 @@
       },
       "rarity": "uncommon",
       "type": "quest",
-      "difficulty": 3
+      "difficulty": 1
     },
     "Quest:daily_safes": {
       "name": {
@@ -1911,7 +1911,7 @@
       },
       "rarity": "uncommon",
       "type": "quest",
-      "difficulty": 4
+      "difficulty": 5
     }
   },
   "lang": {
@@ -1933,26 +1933,26 @@
   },
   "msg": {
     "en": {
-      "start.hello": "👋 Hey! I'm a Fortnite PvE bot to automatically get and manually replace daily quests!\n\n<b>My commands:</b>\n\n🌎 /lang — change quests language\n\n🕹 /quest — your quest list\n\n📊 /stats — your bot stats\n\n⚡️ /status — your server load\n\n📬 /support — if something broke",
-      "lang.detect": "\n\nYour language: <b>{}</b>? The quests will be displayed in it.",
-      "send.auth.code": "🚀 Send value of <b>authorizationCode</b> follow the link:\n\n{}\n\nIf value doesn't exist: open Epic Games - click on your Avatar - 'Account' and try again!",
-      "incorrect.auth.code": "Hey, if you write auth-code is incorrect (only 32 symbols), your msg size: {}! Please try again.\n\nI don't handle messages other than auth-code!",
+      "already.replaced": "🎉 You've already replaced quests today. See you tomorrow! Click /quest to update ♻️",
+      "auth.correct": "👌 Good, your code is 32 symbols! Trying to authorize..",
+      "choose.lang": "🌎 Please choose your language:",
+      "click.button": "Click /quest to update ♻️\n👇 Click a button to replace 1 quest:",
+      "demo.gif": "CgACAgQAAxkDAAIKv2Tox1iVTutK_6oPejhPOR7AzIs0AAKFBAACll1FU7PAQK41kh7UMAQ",
       "error.go.login": "❗ Log in first:",
       "error.not.auth": "❗ Please click /start your user_id deleted from auth.json",
       "error.already.auth": "❗ You already auth! Don't send any message!",
-      "auth.correct": "👌 Good, your code is 32 symbols! Trying to authorize..",
-      "choose.lang": "🌎 Please choose your language:",
+      "incorrect.auth.code": "Hey, if you write auth-code is incorrect (only 32 symbols), your msg size: {}! Please try again.\n\nI don't handle messages other than auth-code!",
       "lang.changed": "♻️ Quests language change to <b>{}</b>!",
-      "quest.pattern": "🕹<b>QUEST:</b> <code>{}</code>\n📖<b>PROGRESS:</b> <code>{}</code>\n💰<b>REWARD:</b> <code>{}</code>\n☠️<b>HARD:</b> <code>{}</code>\n{}\n",
-      "click.button": "Click /quest to update ♻️\n👇 Click a button to replace 1 quest:",
-      "req.quests.wait": "⏳ Requesting a list of quests, waiting..",
-      "already.replaced": "🎉 You've already replaced quests today. See you tomorrow! Click /quest to update ♻️",
+      "lang.detect": "\n\nYour language: <b>{}</b>? The quests will be displayed in it.",
       "no.active.quest": "{}\n\n🎯 Today you don't have any active quest!\nClick /quest to update ♻️",
-      "user.bot.stats": "📊 <b>YOUR BOT STATS</b> 📊\n\n🕹 <b>Quest requests:</b> {}\n♻️ <b>Skipped quests:</b> {}",
+      "quest.pattern": "🕹<b>QUEST:</b> <code>{}</code>\n📖<b>PROGRESS:</b> <code>{}</code>\n💰<b>REWARD:</b> <code>{}</code>\n☠️<b>HARD:</b> <code>{}</code>\n{}\n",
+      "req.quests.wait": "⏳ Requesting a list of quests, waiting..",
+      "send.auth.code": "🚀 Send value of <b>authorizationCode</b> follow the link:\n\n{}\n\nIf value doesn't exist: open Epic Games - click on your Avatar - 'Account' and try again!",
+      "second.start": "<b>Attention!</b>\n\nDon't use the bot if isn't yours!\nYour account can be hacked!\n<b><u>Only for personal use</u>!</b>\n\n💡<b>Run your own version of the bot:</b>\nhttps://github.com/zdky/questreroll",
       "server.status": "⚙️ <b>SERVER STATUS</b> ⚙️\n\n🚀 <b>CPU:</b> {}% ({}x{}Mhz)\n🗂 <b>RAM:</b> {}% ({}/{}MB)\n💿 <b>DISK:</b> {}% ({}/{}GB)\n⌛️ <b>UPTIME:</b> {}",
+      "start.hello": "👋 Hey! I'm a Fortnite PvE bot to automatically get and manually replace daily quests!\n\n<b>My commands:</b>\n\n🌎 /lang — change quests language\n\n🕹 /quest — your quest list\n\n📊 /stats — your bot stats\n\n⚡️ /status — your server load\n\n📬 /support — if something broke",
       "support.contact": "📬 <b>Error?</b>\nIs something broken? Text me about it, we'll be sure to fix it.\n\n<b>Contact:</b> @drnvbot // <a href='https://github.com/zdky/questreroll/issues'><b>or my Github</b></a>",
-      "demo.gif": "CgACAgQAAxkDAAIKv2Tox1iVTutK_6oPejhPOR7AzIs0AAKFBAACll1FU7PAQK41kh7UMAQ",
-      "second.start": "<b>Attention!</b>\n\nDon't use the bot if isn't yours!\nYour account can be hacked!\n<b><u>Only for personal use</u>!</b>\n\n💡<b>Run your own version of the bot:</b>\nhttps://github.com/zdky/questreroll"
+      "user.bot.stats": "📊 <b>YOUR BOT STATS</b> 📊\n\n🕹 <b>Quest requests:</b> {}\n♻️ <b>Skipped quests:</b> {}"
     }
   }
 }
