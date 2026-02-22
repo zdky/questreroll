@@ -16,19 +16,22 @@ class Links:
     )
     auth_code = (
         "https://www.epicgames.com/id/api/redirect?clientId="
-        + "34a02cf8f4414e29b15921876da36f9a&responseType=code"
+        + "34a02cf8f4414e29b15921876da36f9a&responseType=code&prompt=login"
     )
 
 
 class Headers:
+    # Epic Launcher client
     access = (
         "basic MzRhMDJjZjhmNDQxNGUyOWIxNTkyMTg3NmRhMzZmOWE6"
         + "ZGFhZmJjY2M3Mzc3NDUwMzlkZmZlNTNkOTRmYzc2Y2Y="
     )
+    # Fortnite game client
     oauth = (
         "basic MzQ0NmNkNzI2OTRjNGE0NDg1ZDgxYjc3YWRiYjIxNDE6O"
         + "TIwOWQ0YTVlMjVhNDU3ZmI5YjA3NDg5ZDMxM2I0MWE="
     )
+    oauth_content_type = "application/x-www-form-urlencoded"
 
 
 async def fn_json_read():
