@@ -1,7 +1,8 @@
 # pylint: disable=C0415, C0114, C0115, C0116
-import os
 import logging
-from datetime import datetime, timezone, timedelta
+import os
+from datetime import datetime, timedelta, timezone
+
 from config import create_log_file
 
 # Create a custom formatter with colored log levels and custom date format
@@ -81,9 +82,9 @@ def get_time(date_type: str = None):
 
 
 def server_status():
-    import os
     import psutil
-    from fortnite import FN_JSON
+
+    from constants import FN_JSON
 
     cpu_used = psutil.cpu_percent(interval=1)
     cpu_freq = int(psutil.cpu_freq().current)
