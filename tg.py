@@ -1,24 +1,23 @@
 # pylint: disable=C0116, C0114, W0511, W0718
-import re
 import asyncio
-from aiogram.dispatcher.filters import BoundFilter
+import re
+
+from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
-from aiogram import types, Bot
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
-# Locals
-from config import tg_token, first_user, first_user_id
-from utils import log, get_time, server_status
-from database import add_new_user
+from aiogram.dispatcher.filters import BoundFilter
+from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
+
+from config import first_user, first_user_id, tg_token
+from constants import FN_JSON, Links
+from database import add_new_user, edit_user_info, read_user_info
 from fortnite import (
     quest_reroll,
     start_3step_login,
-    tokens_check_and_update,
-    FN_JSON,
-    read_user_info,
-    edit_user_info,
-    Links,
     start_quest_api,
+    tokens_check_and_update,
 )
+from utils import get_time, log, server_status
+
 
 
 bot = Bot(token=tg_token)

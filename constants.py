@@ -1,6 +1,7 @@
 # pylint: disable=C0114, C0115, R0903, C0116, W0718, W0612
-import os
 import asyncio
+import os
+
 import aiohttp
 import orjson
 
