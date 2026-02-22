@@ -1,9 +1,11 @@
 # pylint: disable=C0116, C0115, C0114, W0511, W0718, R0903, W0621, W0719, W1201, W1203, C0415
-from datetime import datetime, timedelta
 import asyncio
+from datetime import datetime, timedelta
+
 import aiohttp
-from constants import Links, Headers, GAME_VER, FN_JSON
-from database import read_user_info, edit_user_info, scheduled_users
+
+from constants import FN_JSON, GAME_VER, Headers, Links
+from database import edit_user_info, read_user_info, scheduled_users
 from utils import get_time, log
 
 
@@ -15,19 +17,7 @@ async def aiorequest(
     json: dict = None,
     from_func: str = "",
 ):
-    """aiohttp post/get request
-
-    Args:
-        method (str): "post" or "get"
-        link (str): FN API link
-        from_func (str): to debug
-
-    Raises:
-        ValueError: json error data
-
-    Returns:
-        (json): fortnite API response
-    """
+    """aiohttp post/get request"""
     try:
         async with aiohttp.ClientSession() as session:
             if method == "post":
@@ -35,12 +25,15 @@ async def aiorequest(
                     link, headers=headers, data=data, json=json
                 )
             elif method == "get":
-                response = await session.get(link, headers=headers, data=data)
+                response = await session.get(link, headers=headers, params=data)
             else:
                 raise ValueError("Invalid request method")
-            res_json = await response.json()
-            if "errorMessage" in res_json:
-                raise Exception(res_json)
+
+            res_json = await response.json(content_type=None)
+            if response.status >= 400 or "errorMessage" in res_json:
+                raise Exception(
+                    f"status={response.status}, body={res_json}"
+                )
             return res_json
     except Exception as error:
         log.error(f"aiorequest() from func {from_func}(): {error}")
@@ -67,7 +60,10 @@ async def get_access_token(token: str, grant_type="authorization_code"):
     else:
         token_type = "code"
     link = Links.oauth_api.format("token")
-    headers_ = {"Authorization": Headers.access}
+    headers_ = {
+        "Authorization": Headers.access,
+        "Content-Type": Headers.oauth_content_type,
+    }
     data = {
         "grant_type": grant_type,
         token_type: token,
@@ -89,7 +85,10 @@ async def get_exchange_token(access_token: str):
         (json): with code for final auth
     """
     link = Links.oauth_api.format("exchange")
-    headers = {"Authorization": f"bearer {access_token}"}
+    headers = {
+        "Authorization": f"bearer {access_token}",
+        "Content-Type": Headers.oauth_content_type,
+    }
     data = {"grant_type": "authorization_code"}
     res_json = await aiorequest(
         "get", link, headers, data, from_func="get_exchange_token"
@@ -115,7 +114,10 @@ async def get_fortnite_token(token: str, grant_type="exchange_code"):
     else:
         token_type = "refresh_token"
     link = Links.oauth_api.format("token")
-    headers_ = {"Authorization": Headers.oauth}
+    headers_ = {
+        "Authorization": Headers.oauth,
+        "Content-Type": Headers.oauth_content_type,
+    }
     data = {"grant_type": grant_type, token_type: token, "token_type": "eg1"}
     res_json = await aiorequest(
         "post", link, headers_, data, from_func="get_fortnite_token"
