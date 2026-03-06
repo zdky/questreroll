@@ -6,13 +6,16 @@ import aiohttp
 import orjson
 
 
+GAME_VER = "++Fortnite+Release-39.40-CL-50341043 Windows/10.0.26100.1.256.64bit"
+
+
 class Links:
     oauth_api = (
         "https://account-public-service-prod.ol.epicgames.com/"
         + "account/api/oauth/{0}"
     )
     profile_api = (
-        "https://fortnite-public-service-prod11.ol.epicgames.com/"
+        "https://mcp-gc.live.fngw.ol.epicgames.com/"
         + "fortnite/api/game/v2/profile/{0}/client/{1}?profileId={2}"
     )
     auth_code = (
@@ -27,10 +30,10 @@ class Headers:
         "basic MzRhMDJjZjhmNDQxNGUyOWIxNTkyMTg3NmRhMzZmOWE6"
         + "ZGFhZmJjY2M3Mzc3NDUwMzlkZmZlNTNkOTRmYzc2Y2Y="
     )
-    # Fortnite game client
+    # Fortnite game client (fortniteAndroidGameClient)
     oauth = (
-        "basic MzQ0NmNkNzI2OTRjNGE0NDg1ZDgxYjc3YWRiYjIxNDE6O"
-        + "TIwOWQ0YTVlMjVhNDU3ZmI5YjA3NDg5ZDMxM2I0MWE="
+        "basic M2Y2OWU1NmM3NjQ5NDkyYzhjYzI5ZjFhZjA4YThhMTI6"
+        + "YjUxZWU5Y2IxMjIzNGY1MGE2OWVmYTY3ZWY1MzgxMmU="
     )
     oauth_content_type = "application/x-www-form-urlencoded"
 
@@ -52,4 +55,3 @@ async def fn_json_read():
 
 
 FN_JSON = asyncio.get_event_loop().run_until_complete(fn_json_read())
-GAME_VER = "++Fortnite+Release-26.00-CL-27424790"
