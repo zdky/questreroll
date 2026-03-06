@@ -2,22 +2,19 @@
 # Is something broken? Text me about it, we'll be sure to fix it!
 # Contact: https://t.me/drnvbot
 # or my Github: https://github.com/zdky/questreroll/issues
-from time import sleep
+import asyncio
 
-from aiogram import executor
-
-from tg import dp, log, tg_token
+from tg import dp, log, tg_token, bot
 from utils import create_auth_json
 
-# Start bot
-if __name__ == "__main__":
+
+async def main() -> None:
     create_auth_json()
     if len(tg_token) > 20:
-        while True:
-            try:
-                executor.start_polling(dp, skip_updates=True)
-            except Exception as error:
-                log.critical(f"BOT DOWN, ERROR: {error}")
-            sleep(20)
+        await dp.start_polling(bot)
     else:
         log.error("Please insert your telegram bot token in 'config.py'")
+
+
+if __name__ == '__main__':
+    asyncio.run(main())
