@@ -109,10 +109,10 @@ async def get_fortnite_token(token: str, grant_type="exchange_code"):
     Returns:
         data (json): with access_token
     """
-    if grant_type == "exchange_code":
+    if grant_type == "refresh_token":
         token_type = grant_type
     else:
-        token_type = "refresh_token"
+        token_type = "exchange_code"
     link = Links.oauth_api.format("token")
     headers_ = {
         "Authorization": Headers.oauth,
@@ -138,7 +138,7 @@ async def get_quests(access_token: str, account_id: str):
     """
     link = Links.profile_api.format(account_id, "ClientQuestLogin", "campaign")
     headers = {
-        "User-Agent": f"Fortnite/{GAME_VER} Windows/10.0.19045.3155.64bit",
+        "User-Agent": f"Fortnite/{GAME_VER}",
         "Authorization": f"bearer {access_token}",
         "Content-Type": "application/json",
     }
