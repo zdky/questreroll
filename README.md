@@ -1,3 +1,5 @@
+
+
 <p align="center">
     <img width="100%" src="https://i.imgur.com/69PK6tT.png">
 </p>
@@ -155,7 +157,7 @@ systemctl start questreroll.service
 - **Debug**: Check status service:
 
 ```bash
-systemctl status questreroll
+systemctl status questreroll.service
 ```
 
 - **Debug**: Check program logs:
