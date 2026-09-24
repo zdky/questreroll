@@ -38,7 +38,9 @@ so I created this bot to do it at any time.<br><br>p.s. *python is my hobby sinc
 * Change quest language (all 15 langs from Fortnite).
 * Delete all telegram trash messages.
 * Server load info, user bot stats.
-* Use .json file for "database".
+* Use .json file for "database" (atomic writes, safe for concurrent requests).
+* Daily quest list auto-update at 00:05 UTC, restored after bot restart.
+* Built on [aiogram 3](https://github.com/aiogram/aiogram).
 
 ## Demo 🎬
 
@@ -64,13 +66,13 @@ git clone https://github.com/zdky/questreroll.git
 cd questreroll
 ```
 
-- **Step 0**: Add your telegram bot token to config.py:
+- **Step 3**: Add your telegram bot token to config.py (or pass it with the `TG_TOKEN` environment variable):
 
-```bash
-tg_token = 'YOUR_TOKEN'
+```python
+tg_token = "YOUR_TOKEN"
 ```
 
-- **Step 3**: Check your python version:
+- **Step 4**: Check your python version:
 
 ```bash
 python3.11 --version
@@ -84,37 +86,37 @@ add-apt-repository "ppa:deadsnakes/ppa" -y
 apt update && apt install python3.11 python3.11-venv
 ```
 
-- **Step 4**: Create virtual environment:
+- **Step 5**: Create virtual environment:
 
 ```bash
 python3.11 -m venv .
 ```
 
-- **Step 5**: Run virtual environment:
+- **Step 6**: Run virtual environment:
 
 ```bash
 source bin/activate
 ```
 
-- **Step 6**: Install requirements:
+- **Step 7**: Install requirements:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-- **Step 7**: Grant rights:
+- **Step 8**: Grant rights:
 
 ```bash
 chmod +x start.py
 ```
 
-- **Step 8**: Create service:
+- **Step 9**: Create service:
 
 ```bash
 nano /etc/systemd/system/questreroll.service
 ```
 
-- **Step 9**: Put in file questreroll.service:
+- **Step 10**: Put in file questreroll.service:
 
 ```bash
 [Unit]
@@ -140,7 +142,7 @@ Save and exit:
 CTRL+O > Enter > CTRL+X
 ```
 
-- **Step 10**: Start service:
+- **Step 11**: Start service:
 
 ```bash
 systemctl enable questreroll.service
@@ -184,7 +186,6 @@ systemctl stop questreroll.service
 * Add the mod, "auto-replace quest with small V-bucks reward" as well as "replace difficult quests".
 * Add notifications when a "new quest appears", as well as "3/3 quests, please complete them"
 * Add translation of the entire bot into all fortnite languages.
-* Rewrite imports with best practices.
 
 ## Community
 

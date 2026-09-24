@@ -1,104 +1,101 @@
-# pylint: disable=E1101, C0114, W0718
-import aiofiles
-import orjson  # faster json
+"""Tiny JSON "database" (auth.json) with an in-memory cache.
 
+All changes go through one asyncio.Lock, so concurrent handlers can't
+overwrite each other's data, and the file is replaced atomically,
+so a crash in the middle of a write can't corrupt it.
+"""
+
+import asyncio
+import copy
+import os
+
+import orjson
+
+from constants import BASE_DIR
 from utils import log
 
-scheduled_users = []
+AUTH_PATH = BASE_DIR / "auth.json"
 
 
-async def add_new_user(user_id: int, lang: str):
-    """Add new user_id in auth.json with fields:\n
-    {
-        "lang": lang,
-        "acc_token": {},\n
-        "fn_token": {},
-        "buttons": {},\n
-        "headers": {},
-        "msg_for_del": [],\n
-        "first_quest_msg": "",\n
-        "stats": {"quest": 0, "skips": 0}
-    }
-
-    Args:
-        user_id (int): telegram user id
-    """
-    new_user = {
+def new_user(lang: str = "en") -> dict:
+    return {
         "lang": lang,
         "acc_token": {},
         "fn_token": {},
         "buttons": {},
-        "headers": {},
         "msg_for_del": [],
         "first_quest_msg": "",
         "stats": {"quest": 0, "skips": 0},
     }
-    try:
-        async with aiofiles.open("auth.json", "r", encoding="utf-8") as file1:
-            user_data = orjson.loads(await file1.read())
-        user_data[str(user_id)] = new_user
-        new_data = orjson.dumps(user_data, option=orjson.OPT_INDENT_2).decode("utf-8")
-        async with aiofiles.open("auth.json", "w", encoding="utf-8") as file2:
-            await file2.write(new_data)
-    except Exception as error:
-        log.error(f"in add_new_user(), ERROR: {error}")
 
 
-async def edit_user_info(user_id: int, field: str = None, new_data=None):
-    """Edit user data in auth.json
+class Database:
+    def __init__(self, path=AUTH_PATH):
+        self.path = path
+        self._lock = asyncio.Lock()
+        self._data: dict[str, dict] = self._load()
 
-    Args:
-        user_id (int): telegram user id\n
-        field (str): for change key in json (lang/buttons/
-        acc_token/fn_token/
-        msg_for_del/first_quest_msg)
-        OR quest/skips for stats +1\n
-        new_data: if field="lang":lang_code(str), other:(dict) or empty = {}
-    """
-    # log.info(f"in edit_user_info():\nuser_id = {user_id}\n"
-    #          + f"field = {field}\nnew_data = {new_data}")
+    def _load(self) -> dict:
+        if not self.path.exists():
+            self.path.write_text("{}", encoding="utf-8")
+            return {}
+        data = orjson.loads(self.path.read_bytes() or b"{}")
+        # fill fields added in newer versions
+        for user_id, user in data.items():
+            data[user_id] = new_user() | user
+        return data
 
-    try:
-        async with aiofiles.open("auth.json", "r", encoding="utf-8") as file1:
-            user_data = orjson.loads(await file1.read())
+    def _save(self) -> None:
+        tmp_path = self.path.with_suffix(".json.tmp")
+        tmp_path.write_bytes(orjson.dumps(self._data, option=orjson.OPT_INDENT_2))
+        os.replace(tmp_path, self.path)
 
-        user_id = str(user_id)
-        if field == "msg_for_del" and new_data:
-            user_data[user_id][field].append(new_data)
-        elif field in ("quest", "skips"):
-            user_data[user_id]["stats"][field] += 1
-        else:
-            user_data[user_id][field] = new_data
+    def user_ids(self) -> list[int]:
+        return [int(user_id) for user_id in self._data]
 
-        new_data = orjson.dumps(user_data, option=orjson.OPT_INDENT_2).decode("utf-8")
-        if new_data:
-            async with aiofiles.open("auth.json", "w", encoding="utf-8") as file2:
-                await file2.write(new_data)
-    except Exception as error:
-        log.error(f"in edit_user_info(), ERROR: {error}")
+    def get(self, user_id: int) -> dict | None:
+        """Copy of user data or None if user isn't registered."""
+        user = self._data.get(str(user_id))
+        return copy.deepcopy(user) if user is not None else None
+
+    async def add_user(self, user_id: int, lang: str) -> None:
+        async with self._lock:
+            self._data[str(user_id)] = new_user(lang)
+            await asyncio.to_thread(self._save)
+
+    async def update(self, user_id: int, **fields) -> None:
+        """Set user fields, e.g. update(user_id, lang="ru", buttons={})"""
+        async with self._lock:
+            user = self._data.get(str(user_id))
+            if user is None:
+                log.warning(f"update(): user_id {user_id} isn't in auth.json")
+                return
+            user.update(copy.deepcopy(fields))
+            await asyncio.to_thread(self._save)
+
+    async def add_msg_for_del(self, user_id: int, msg_id: int) -> None:
+        async with self._lock:
+            user = self._data.get(str(user_id))
+            if user is not None:
+                user["msg_for_del"].append(msg_id)
+                await asyncio.to_thread(self._save)
+
+    async def pop_msgs_for_del(self, user_id: int) -> list[int]:
+        async with self._lock:
+            user = self._data.get(str(user_id))
+            if not user or not user["msg_for_del"]:
+                return []
+            msgs, user["msg_for_del"] = user["msg_for_del"], []
+            await asyncio.to_thread(self._save)
+            return msgs
+
+    async def inc_stat(self, user_id: int, stat: str) -> None:
+        """+1 to user stats: stat = "quest" / "skips" """
+        async with self._lock:
+            user = self._data.get(str(user_id))
+            if user is not None:
+                user["stats"][stat] = user["stats"].get(stat, 0) + 1
+                await asyncio.to_thread(self._save)
 
 
-async def read_user_info(user_id: int):
-    """Read user from auth.json by id
-
-    Args:
-        user_id (int): telegram user id
-
-    Returns:
-        user_data (dict): { "lang": lang,
-        "acc_token": {},\n
-        "fn_token": {},
-        "buttons": {},\n
-        "headers": {},
-        "msg_for_del": [],\n
-        "first_quest_msg": "",\n
-        "stats": {"quest": 0, "skips": 0}}
-    """
-    try:
-        async with aiofiles.open("auth.json", "r", encoding="utf-8") as file:
-            user_data = orjson.loads(await file.read())
-        user_data = user_data.get(str(user_id), {})
-        return user_data
-    except Exception as error:
-        log.error(f"in read_user_info(), ERROR: {error}")
-        return False
+db = Database()

@@ -2,22 +2,34 @@
 # Is something broken? Text me about it, we'll be sure to fix it!
 # Contact: https://t.me/drnvbot
 # or my Github: https://github.com/zdky/questreroll/issues
-from time import sleep
+import asyncio
+import sys
 
-from aiogram import executor
+from aiogram import Bot, Dispatcher
+from aiogram.client.default import DefaultBotProperties
+from aiogram.enums import ParseMode
 
-from tg import dp, log, tg_token
-from utils import create_auth_json
+from config import tg_token
+from tg import router
+from utils import log
+
+
+async def main() -> None:
+    bot = Bot(token=tg_token, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+    dp = Dispatcher()
+    dp.include_router(router)
+    # polling reconnects by itself on network errors
+    await dp.start_polling(bot, drop_pending_updates=True)
+
 
 # Start bot
 if __name__ == "__main__":
-    create_auth_json()
-    if len(tg_token) > 20:
-        while True:
-            try:
-                executor.start_polling(dp, skip_updates=True)
-            except Exception as error:
-                log.critical(f"BOT DOWN, ERROR: {error}")
-            sleep(20)
-    else:
-        log.error("Please insert your telegram bot token in 'config.py'")
+    if len(tg_token) < 20:
+        log.error(
+            "Please insert your telegram bot token in 'config.py' (or TG_TOKEN env)"
+        )
+        sys.exit(1)
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        pass
